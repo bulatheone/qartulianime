@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QartuliAnime</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #111; color: white; margin: 0; padding: 0; }
+        header { background: #222; padding: 10px; text-align: center; font-size: 24px; }
+        .series-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; padding: 15px; }
+        .card { background: #1c1c1c; border-radius: 8px; overflow: hidden; cursor: pointer; transition: transform 0.2s; }
+        .card:hover { transform: scale(1.05); }
+        .card img { width: 100%; height: 300px; object-fit: cover; }
+        .card-title { padding: 10px; font-size: 18px; text-align: center; }
+        iframe { width: 100%; height: 500px; border: none; margin-top: 10px; }
+        .episodes { padding: 10px; }
+        .episode-link { display: block; padding: 5px; background: #333; margin: 5px 0; border-radius: 4px; text-decoration: none; color: white; }
+        .episode-link:hover { background: #555; }
+    </style>
+</head>
+<body>
+<header>QartuliAnime</header>
+<div class="series-grid" id="seriesList"></div>
+
+<script>
+const SERIES = [
+    {
+        title: "Attack on Titan",
+        cover: "images/aot.jpg",
+        genres: ["Action", "Drama"],
+        episodes: [
+            { title: "Episode 1", src: "https://ok.ru/videoembed/5177596537645" },
+            { title: "Episode 2", src: "https://streamwish.to/e/abcd1234" }
+        ]
+    },
+    {
+        title: "Naruto",
+        cover: "images/naruto.jpg",
+        genres: ["Action", "Adventure"],
+        episodes: [
+            { title: "Episode 1", src: "https://ok.ru/videoembed/1234567890" }
+        ]
+    }
+];
+
+function renderSeries() {
+    const container = document.getElementById('seriesList');
+    container.innerHTML = SERIES.map(s => `
+        <div class="card" onclick="showEpisodes('${s.title}')">
+            <img src="${s.cover}" alt="${s.title}">
+            <div class="card-title">${s.title}</div>
+        </div>
+    `).join('');
+}
+
+function showEpisodes(title) {
+    const series = SERIES.find(s => s.title === title);
+    document.body.innerHTML = \`
+        <header>\${series.title}</header>
+        <div class="episodes">
+            \${series.episodes.map(e => `<a href="#" class="episode-link" onclick="playEpisode('\${e.src}')">\${e.title}</a>`).join('')}
+            <div id="player"></div>
+        </div>
+    \`;
+}
+
+function playEpisode(src) {
+    document.getElementById('player').innerHTML = \`<iframe src="\${src}" allowfullscreen></iframe>\`;
+}
+
+renderSeries();
+</script>
+</body>
+</html>
